@@ -2,16 +2,19 @@
   "name": "oslf-maury",
   "version": "1.0.0",
   "description": "Node REST API that lists Odin Sphere Leifthrasir's Maury dishes",
-  "main": "./dist/index.js",
+  "main": "./dist/app.js",
   "type": "module",
   "scripts": {
-    "start": "node ./dist/index.js",
+    "start": "node ./dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "tsc": "tsc"
+    "tsc": "rm -rf ./dist && tsc"
   },
   "author": "Marhadiasha Kusumawardhana",
   "license": "ISC",
   "devDependencies": {
     "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "@types/node": "^16.11.0"
   }
 }
