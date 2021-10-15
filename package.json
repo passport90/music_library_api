@@ -5,8 +5,10 @@
   "main": "./dist/app.js",
   "type": "module",
   "scripts": {
+    "compile": "npm run lint && npm run tsc",
     "lint": "eslint --fix ./src/**",
     "start": "node ./dist/app.js",
+    "start-dotenv": "node -r dotenv/config ./dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "rm -rf ./dist && tsc"
   },
@@ -15,6 +17,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "dotenv": "^10.0.0",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "typescript": "^4.4.4"
