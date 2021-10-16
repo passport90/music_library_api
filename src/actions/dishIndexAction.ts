@@ -1,3 +1,4 @@
+import { Client } from 'pg'
 import Action from '../interfaces/action'
 import Response from '../interfaces/response'
 
@@ -6,8 +7,11 @@ const dishIndexAction: Action = (
   _queryParams: URLSearchParams,
   _body: Record<string, any> | null
 ): Response => {
+  const client = new Client()
+  client.connect()
+  
   return {
-    status: 200, body: { message: 'Hello' }
+    status: 200, body: _body
   }
 }
 

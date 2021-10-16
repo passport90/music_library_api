@@ -5,6 +5,7 @@ import ServerInterface from '../interfaces/serverInterface'
 import StreamHandlerServiceInterface from '../interfaces/streamHandlerServiceInterface'
 
 export const REQUIRED_ENVIRONMENT_VARIABLES = [
+  'DATABASE_URL',
   'SSL_PRIVATE_KEY_FILEPATH',
   'SSL_CERTIFICATE_FILEPATH',
 ]
