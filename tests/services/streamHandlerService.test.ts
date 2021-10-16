@@ -7,6 +7,11 @@ import ResponderInterface from '../../src/interfaces/responderInterface'
 import Response from '../../src/interfaces/response'
 import StreamHandlerService from '../../src/services/streamHandlerService'
 
+const {
+  HTTP2_HEADER_METHOD,
+  HTTP2_METHOD_HEAD,
+} = http2.constants
+
 
 describe('StreamHandlerService', () => {
   describe('handle', () => {
@@ -75,6 +80,34 @@ describe('StreamHandlerService', () => {
 
       expect(mockResponder.respond).toHaveBeenCalledTimes(1)
       expect(mockResponder.respond).toHaveBeenCalledWith(stubExceptionResponse, stubStream)
+    })
+
+    it('responds without response body if method is HEAD', () => {
+      const mockHeaderValidator: HeaderValidatorInterface = { validate: jest.fn() }
+      const mockResponder: ResponderInterface = { respond: jest.fn() }
+      const stubExceptionResponseFactory: ExceptionResponseFactoryInterface = {
+        build: () => { return { status: 500, body: {} }}
+      }
+
+      const streamHandlerService = new StreamHandlerService(
+        mockHeaderValidator,
+        stubExceptionResponseFactory,
+        mockResponder
+      )
+
+      const stubHeaders: http2.IncomingHttpHeaders = { [HTTP2_HEADER_METHOD]: HTTP2_METHOD_HEAD }
+      const mockStream: ServerHttp2StreamInterface = { respond: jest.fn(), end: jest.fn() }
+
+      streamHandlerService.handle(mockStream, stubHeaders)
+
+      expect(mockHeaderValidator.validate).toHaveBeenCalledTimes(1)
+      expect(mockHeaderValidator.validate).toHaveBeenCalledWith(stubHeaders)
+
+      expect(mockResponder.respond).toHaveBeenCalledTimes(1)
+      expect(mockResponder.respond).toHaveBeenCalledWith(
+        { status: 200, body: null },
+        mockStream
+      ) 
     })
   })
 })

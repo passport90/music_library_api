@@ -6,6 +6,7 @@ import ServerHttp2StreamInterface from '../interfaces/node/serverHttp2StreamInte
 import ResponderInterface from '../interfaces/responderInterface'
 import StreamHandlerServiceInterface from '../interfaces/streamHandlerServiceInterface'
 
+const { HTTP2_HEADER_METHOD, HTTP2_METHOD_HEAD } = http2.constants
 export default class StreamHandlerService implements StreamHandlerServiceInterface {
   public constructor(
     private headerValidator: HeaderValidatorInterface,
@@ -26,12 +27,7 @@ export default class StreamHandlerService implements StreamHandlerServiceInterfa
       return
     }
 
-    this.responder.respond(
-      {
-        status: 200,
-        body: { message: 'Hello, world!' }
-      },
-      stream,
-    )
+    const body = headers[HTTP2_HEADER_METHOD] !== HTTP2_METHOD_HEAD ? { message: 'Hello, world!' } : null
+    this.responder.respond({ status: 200, body }, stream)
   }
 }

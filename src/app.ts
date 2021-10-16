@@ -14,8 +14,6 @@ import StreamHandlerService from './services/streamHandlerService.js'
 const environmentVariableChecker = new EnvironmentVariableChecker()
 const argumentParser = new ArgumentParser()
 
-const errorHandlerService = new ErrorHandlerService()
-
 const headerValidator = new HeaderValidator()
 const exceptionResponseFactory = new ExceptionResponseFactory()
 const responder = new Responder()
@@ -24,6 +22,8 @@ const streamHandlerService = new StreamHandlerService(
   exceptionResponseFactory,
   responder,
 )
+
+const errorHandlerService = new ErrorHandlerService()
 
 const filesystem = new Filesystem()
 const http2Service = new Http2Service()

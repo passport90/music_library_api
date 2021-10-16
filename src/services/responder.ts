@@ -14,6 +14,11 @@ export default class Responder implements ResponderInterface {
       [HTTP2_HEADER_CONTENT_TYPE]: 'application/json',
       [HTTP2_HEADER_STATUS]: response.status,
     })
+
+    if (response.body === null) {
+      return
+    }
+
     stream.end(JSON.stringify(response.body))
   }
 }

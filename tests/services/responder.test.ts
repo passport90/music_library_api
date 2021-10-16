@@ -32,5 +32,22 @@ describe('Responder', () => {
         '{"message":"Resource not found","name":"Omelette","done":true}'
       )
     })
+
+    it('Does not write body to stream if response has null body', () => {
+      const stubResponse: Response = { status: 200, body: null }
+
+      const mockStream: ServerHttp2StreamInterface = { respond: jest.fn(), end: jest.fn() }
+
+      const responder = new Responder()
+      responder.respond(stubResponse, mockStream)
+
+      expect(mockStream.respond).toHaveBeenCalledTimes(1)
+      expect(mockStream.respond).toHaveBeenCalledWith({
+        [HTTP2_HEADER_CONTENT_TYPE]: 'application/json',
+        [HTTP2_HEADER_STATUS]: 200
+      })
+
+      expect(mockStream.end).not.toHaveBeenCalled()
+    })
   })
 })
