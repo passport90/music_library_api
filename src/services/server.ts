@@ -1,10 +1,13 @@
-import http2 from 'http2'
 import StreamHandler from '../interfaces/streamHandler'
 import ErrorHandler from '../interfaces/errorHandler'
-import Filesystem from './filesystem'
+import FilesystemInterface from '../interfaces/filesystemInterface'
+import Http2ServiceInterface from '../interfaces/http2ServiceInterface'
 
 export default class Server {
-  constructor(private filesystem: Filesystem) {}
+  constructor(
+    private filesystem: FilesystemInterface,
+    private http2Service: Http2ServiceInterface,
+  ) { }
 
   public run = (
     port: number,
@@ -15,7 +18,7 @@ export default class Server {
   ) => {
     const sslPrivateKey = this.filesystem.readFileSync(sslPrivateKeyFilePath) 
     const sslCertificate = this.filesystem.readFileSync(sslCertificateFilePath)
-    const server = http2.createSecureServer({ key: sslPrivateKey, cert: sslCertificate })
+    const server = this.http2Service.createSecureServer({ key: sslPrivateKey, cert: sslCertificate })
 
     server.on('error', errorHandler)
     server.on('stream', streamHandler)

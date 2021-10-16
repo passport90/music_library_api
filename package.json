@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "compile": "npm run lint && npm run tsc",
-    "lint": "eslint --fix ./src/**",
+    "lint": "eslint --fix ./src/** ./tests/**",
     "start": "node ./dist/app.js",
     "start:dev": "node -r dotenv/config ./dist/app.js",
     "test": "jest",

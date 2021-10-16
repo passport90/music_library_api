@@ -1,6 +1,7 @@
 import ErrorHandler from './interfaces/errorHandler'
 import StreamHandler from './interfaces/streamHandler'
-import Filesystem from './services/filesystem.js'
+import Filesystem from './services/node/filesystem.js'
+import Http2Service from './services/node/http2Service'
 import Server from './services/server.js'
 
 const assertEnvironmentVariablesDefined = (variableNames: string[]): void => {
@@ -28,8 +29,9 @@ if (process.argv.length > 2) {
   }
 }
 
+const http2Service = new Http2Service()
 const filesystem = new Filesystem()
-const server = new Server(filesystem)
+const server = new Server(filesystem, http2Service)
 
 const streamHandler: StreamHandler = (stream, _headers) => {
   stream.respond({
