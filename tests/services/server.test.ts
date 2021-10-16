@@ -1,14 +1,14 @@
 import ErrorHandler from '../../src/interfaces/errorHandler'
-import FilesystemInterface from '../../src/interfaces/filesystemInterface'
-import Http2SecureServerInterface from '../../src/interfaces/http2SecureServerInterface'
-import Http2ServiceInterface from '../../src/interfaces/http2ServiceInterface'
+import FilesystemInterface from '../../src/interfaces/node/filesystemInterface'
+import Http2SecureServerInterface from '../../src/interfaces/node/http2SecureServerInterface'
+import Http2ServiceInterface from '../../src/interfaces/node/http2ServiceInterface'
 import StreamHandler from '../../src/interfaces/streamHandler'
 import Server from '../../src/services/server'
 
 describe('Server', () => {
   describe('run', () => {
     it('runs the server', () => {
-      const oldEnv = process.env
+      const originalEnv = { ...process.env }
 
       const stubPort = 12345
       const stubStreamHandler = (() => null) as StreamHandler
@@ -62,7 +62,7 @@ describe('Server', () => {
       expect(mockSecureServer.listen).toHaveBeenCalledWith(stubPort)
       expect(mockSecureServer.listen).toHaveBeenCalledTimes(1)
 
-      process.env = oldEnv
+      process.env = { ...originalEnv }
     })
   })
 })

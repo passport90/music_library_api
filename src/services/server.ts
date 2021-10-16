@@ -1,7 +1,7 @@
 import StreamHandler from '../interfaces/streamHandler'
 import ErrorHandler from '../interfaces/errorHandler'
-import FilesystemInterface from '../interfaces/filesystemInterface'
-import Http2ServiceInterface from '../interfaces/http2ServiceInterface'
+import FilesystemInterface from '../interfaces/node/filesystemInterface'
+import Http2ServiceInterface from '../interfaces/node/http2ServiceInterface'
 
 export default class Server {
   constructor(

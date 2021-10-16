@@ -1,5 +1,5 @@
-import ErrorHandler from './errorHandler'
-import StreamHandler from './streamHandler'
+import ErrorHandler from '../errorHandler'
+import StreamHandler from '../streamHandler'
 
 export default interface Http2SecureServerInterface {
   on(event: 'error', listener: ErrorHandler): this;

@@ -1,22 +1,14 @@
 import ErrorHandler from './interfaces/errorHandler'
 import StreamHandler from './interfaces/streamHandler'
+import Application from './services/application'
+import EnvironmentVariableChecker from './services/environmentVariableChecker'
 import Filesystem from './services/node/filesystem.js'
-import Http2Service from './services/node/http2Service'
+import Http2Service from './services/node/http2Service.js'
 import Server from './services/server.js'
 
-const assertEnvironmentVariablesDefined = (variableNames: string[]): void => {
-  for (const variableName of variableNames) {
-    if (process.env[variableName] === undefined) {
-      throw new Error(`An environment variable has not been defined yet: ${variableName}`)
-    }
-  }
-} 
-
-const environmentVariables = [
-  'SSL_PRIVATE_KEY_FILEPATH',
-  'SSL_CERTIFICATE_FILEPATH',
-]
-assertEnvironmentVariablesDefined(environmentVariables)
+const environmentVariableChecker = new EnvironmentVariableChecker()
+const application = new Application(environmentVariableChecker)
+application.run(process.argv)
 
 let port = 443 
 if (process.argv.length > 2) {
