@@ -1,9 +1,5 @@
-import http2 from 'http2'
+import ServerHttp2StreamInterface from './node/serverHttp2StreamInterface'
 
 export default interface StreamHandler {
-  (
-    stream: http2.ServerHttp2Stream,
-    headers: http2.IncomingHttpHeaders,
-    flags: number,
-  ): void
+  (stream: ServerHttp2StreamInterface): void
 }

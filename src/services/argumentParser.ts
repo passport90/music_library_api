@@ -1,4 +1,6 @@
-export default class ArgumentParser {
+import ArgumentParserInterface from '../interfaces/argumentParserInterface'
+
+export default class ArgumentParser implements ArgumentParserInterface {
   public getPort = (argv: string[], defaultPort: number): number => {
     const port = argv.length >= 3 ? parseInt(argv[2]) : defaultPort
 

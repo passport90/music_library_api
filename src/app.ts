@@ -1,34 +1,30 @@
-import Application from './services/application'
-import ArgumentParser from './services/argumentParser'
-import EnvironmentVariableChecker from './services/environmentVariableChecker'
+import Application from './services/application.js'
+import ArgumentParser from './services/argumentParser.js'
+import EnvironmentVariableChecker from './services/environmentVariableChecker.js'
+import ErrorHandlerService from './services/errorHandlerService.js'
+import Filesystem from './services/node/filesystem.js'
+import Http2Service from './services/node/http2Service.js'
+import Server from './services/server.js'
+import StreamHandlerService from './services/streamHandlerService.js'
 
+// Setup dependencies
 const environmentVariableChecker = new EnvironmentVariableChecker()
 const argumentParser = new ArgumentParser()
-const application = new Application(environmentVariableChecker, argumentParser)
+
+const errorHandlerService = new ErrorHandlerService()
+const streamHandlerService = new StreamHandlerService()
+
+const filesystem = new Filesystem()
+const http2Service = new Http2Service()
+const server = new Server(filesystem, http2Service)
+
+const application = new Application(
+  environmentVariableChecker,
+  argumentParser,
+  streamHandlerService,
+  errorHandlerService,
+  server,
+)
 
 // Run Application
 application.run(process.argv)
-
-process.exit()
-
-// const http2Service = new Http2Service()
-// const filesystem = new Filesystem()
-// const server = new Server(filesystem, http2Service)
-
-// const streamHandler: StreamHandler = (stream, _headers) => {
-//   stream.respond({
-//     'content-type': 'text/plain; charset=utf-8',
-//     ':status': 200
-//   })
-//   stream.end('Hello, World!')
-// }
-
-// const errorHandler: ErrorHandler = (error) => console.log(error)
-
-// server.run(
-//   port,
-//   streamHandler,
-//   errorHandler,
-//   process.env.SSL_PRIVATE_KEY_FILEPATH as string,
-//   process.env.SSL_CERTIFICATE_FILEPATH as string,
-// )
