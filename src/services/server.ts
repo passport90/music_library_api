@@ -10,7 +10,7 @@ export default class Server implements ServerInterface {
     private http2Service: Http2ServiceInterface,
   ) { }
 
-  public run = (
+  public serve = (
     port: number,
     streamHandler: StreamHandler,
     errorHandler: ErrorHandler,

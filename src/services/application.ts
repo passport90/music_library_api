@@ -24,7 +24,7 @@ export default class Application {
     this.environmentVariableChecker.check(REQUIRED_ENVIRONMENT_VARIABLES)
     const port = this.argumentParser.getPort(argv, DEFAULT_PORT)
 
-    this.server.run(
+    this.server.serve(
       port,
       this.streamHandlerService.handle,
       this.errorHandlerService.handle,

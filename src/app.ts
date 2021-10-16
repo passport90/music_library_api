@@ -1,3 +1,4 @@
+import routes from './config/routes.js'
 import Application from './services/application.js'
 import ArgumentParser from './services/argumentParser.js'
 import EnvironmentVariableChecker from './services/environmentVariableChecker.js'
@@ -6,7 +7,9 @@ import ExceptionResponseFactory from './services/exceptionResponseFactory.js'
 import HeaderValidator from './services/headerValidator.js'
 import Filesystem from './services/node/filesystem.js'
 import Http2Service from './services/node/http2Service.js'
+import RequestBodyParser from './services/requestBodyParser.js'
 import Responder from './services/responder.js'
+import Router from './services/router.js'
 import Server from './services/server.js'
 import StreamHandlerService from './services/streamHandlerService.js'
 
@@ -17,10 +20,14 @@ const argumentParser = new ArgumentParser()
 const headerValidator = new HeaderValidator()
 const exceptionResponseFactory = new ExceptionResponseFactory()
 const responder = new Responder()
+const requestBodyParser = new RequestBodyParser()
+const router = new Router(routes)
 const streamHandlerService = new StreamHandlerService(
   headerValidator,
   exceptionResponseFactory,
   responder,
+  requestBodyParser,
+  router,
 )
 
 const errorHandlerService = new ErrorHandlerService()

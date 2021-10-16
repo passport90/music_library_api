@@ -29,7 +29,9 @@ describe('StreamHandlerService', () => {
       )
 
       const stubHeaders: http2.IncomingHttpHeaders = {}
-      const mockStream: ServerHttp2StreamInterface = { respond: jest.fn(), end: jest.fn() }
+      const mockStream: ServerHttp2StreamInterface = {
+        on: () => null, read: () => null, respond: jest.fn(), end: jest.fn()
+      }
 
       streamHandlerService.handle(mockStream, stubHeaders)
 
@@ -71,7 +73,9 @@ describe('StreamHandlerService', () => {
       )
 
       const stubHeaders: http2.IncomingHttpHeaders = {}
-      const stubStream: ServerHttp2StreamInterface = { respond: () => true, end: () => true }
+      const stubStream: ServerHttp2StreamInterface = {
+        on: () => null, read: () => null, respond: () => null, end: () => null
+      }
 
       streamHandlerService.handle(stubStream, stubHeaders)
 
@@ -96,7 +100,9 @@ describe('StreamHandlerService', () => {
       )
 
       const stubHeaders: http2.IncomingHttpHeaders = { [HTTP2_HEADER_METHOD]: HTTP2_METHOD_HEAD }
-      const mockStream: ServerHttp2StreamInterface = { respond: jest.fn(), end: jest.fn() }
+      const mockStream: ServerHttp2StreamInterface = {
+        on: () => null, read: () => null, respond: jest.fn(), end: jest.fn()
+      }
 
       streamHandlerService.handle(mockStream, stubHeaders)
 

@@ -6,7 +6,7 @@ import StreamHandler from '../../src/interfaces/streamHandler'
 import Server from '../../src/services/server'
 
 describe('Server', () => {
-  describe('run', () => {
+  describe('serve', () => {
     it('runs the server', () => {
       const originalEnv = { ...process.env }
 
@@ -55,7 +55,7 @@ describe('Server', () => {
       }
 
       const server = new Server(stubFilesystem, stubHttp2Service)
-      server.run(stubPort, stubStreamHandler, stubErrorHandler, stubPrivateKeyFilePath, stubCertificateFilePath)
+      server.serve(stubPort, stubStreamHandler, stubErrorHandler, stubPrivateKeyFilePath, stubCertificateFilePath)
       
       expect(mockSecureServer.on).toHaveBeenCalledWith('error', stubErrorHandler)
       expect(mockSecureServer.on).toHaveBeenCalledWith('stream', stubStreamHandler)
