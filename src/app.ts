@@ -2,6 +2,7 @@ import Application from './services/application.js'
 import ArgumentParser from './services/argumentParser.js'
 import EnvironmentVariableChecker from './services/environmentVariableChecker.js'
 import ErrorHandlerService from './services/errorHandlerService.js'
+import ExceptionResponseFactory from './services/exceptionResponseFactory.js'
 import HeaderValidator from './services/headerValidator.js'
 import Filesystem from './services/node/filesystem.js'
 import Http2Service from './services/node/http2Service.js'
@@ -16,8 +17,13 @@ const argumentParser = new ArgumentParser()
 const errorHandlerService = new ErrorHandlerService()
 
 const headerValidator = new HeaderValidator()
+const exceptionResponseFactory = new ExceptionResponseFactory()
 const responder = new Responder()
-const streamHandlerService = new StreamHandlerService(headerValidator, responder)
+const streamHandlerService = new StreamHandlerService(
+  headerValidator,
+  exceptionResponseFactory,
+  responder,
+)
 
 const filesystem = new Filesystem()
 const http2Service = new Http2Service()

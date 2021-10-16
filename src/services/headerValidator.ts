@@ -16,7 +16,7 @@ export default class HeaderValidator implements HeaderValidatorInterface {
     ) {
       const exception: Exception = {
         code: 400,
-        message: 'Only JSON content type is accepted on POST requests.'
+        message: 'Only application/json content type is accepted on POST requests.'
       }
       throw exception
     }
