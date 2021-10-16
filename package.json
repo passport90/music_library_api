@@ -8,8 +8,9 @@
     "compile": "npm run lint && npm run tsc",
     "lint": "eslint --fix ./src/**",
     "start": "node ./dist/app.js",
-    "start-dotenv": "node -r dotenv/config ./dist/app.js",
+    "start:dev": "node -r dotenv/config ./dist/app.js",
     "test": "jest",
+    "test:cov": "jest --coverage",
     "tsc": "rm -rf ./dist && tsc"
   },
   "author": "Marhadiasha Kusumawardhana",
