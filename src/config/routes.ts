@@ -1,11 +1,11 @@
-import dishIndexAction from '../actions/dishIndexAction.js'
+import artistIndexAction from '../actions/artistIndexAction.js'
 import Route from '../interfaces/route'
 
 const routes: Route[] = [
   {
     method: 'GET',
-    path: /^\/dishes\/?$/,
-    action: dishIndexAction,
+    path: /^\/artists\/?$/,
+    action: artistIndexAction,
   }
 ]
 

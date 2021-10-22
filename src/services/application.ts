@@ -1,3 +1,4 @@
+import { Client as PostgreSQLClient } from 'pg'
 import ArgumentParserInterface from '../interfaces/argumentParserInterface'
 import EnvironmentVariableCheckerInterface from '../interfaces/environmentVariableCheckerInterface'
 import ErrorHandlerServiceInterface from '../interfaces/errorHandlerServiceInterface'
@@ -16,6 +17,7 @@ export default class Application {
   public constructor(
     private environmentVariableChecker: EnvironmentVariableCheckerInterface,
     private argumentParser: ArgumentParserInterface,
+    private pgClient: PostgreSQLClient,
     private streamHandlerService: StreamHandlerServiceInterface,
     private errorHandlerService: ErrorHandlerServiceInterface,
     private server: ServerInterface,
@@ -24,6 +26,7 @@ export default class Application {
   public run = (argv: string[]): void => {
     this.environmentVariableChecker.check(REQUIRED_ENVIRONMENT_VARIABLES)
     const port = this.argumentParser.getPort(argv, DEFAULT_PORT)
+    this.pgClient.connect()
 
     this.server.serve(
       port,

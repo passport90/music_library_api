@@ -1,3 +1,4 @@
+import { Client as PostgreSQLClient} from 'pg'
 import routes from './config/routes.js'
 import Application from './services/application.js'
 import ArgumentParser from './services/argumentParser.js'
@@ -20,14 +21,16 @@ const argumentParser = new ArgumentParser()
 const headerValidator = new HeaderValidator()
 const exceptionResponseFactory = new ExceptionResponseFactory()
 const responder = new Responder()
-const requestBodyParser = new RequestBodyParser()
 const router = new Router(routes)
+const requestBodyParser = new RequestBodyParser()
+const pgClient = new PostgreSQLClient()
 const streamHandlerService = new StreamHandlerService(
   headerValidator,
   exceptionResponseFactory,
   responder,
-  requestBodyParser,
   router,
+  requestBodyParser,
+  pgClient,
 )
 
 const errorHandlerService = new ErrorHandlerService()
@@ -39,6 +42,7 @@ const server = new Server(filesystem, http2Service)
 const application = new Application(
   environmentVariableChecker,
   argumentParser,
+  pgClient,
   streamHandlerService,
   errorHandlerService,
   server,

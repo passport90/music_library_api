@@ -1,7 +1,7 @@
 import http2 from 'http2'
 import Exception from '../interfaces/exception'
-import Response from '../interfaces/response'
 import Route from '../interfaces/route'
+import RoutingResult from '../interfaces/routingResult'
 
 const {
   HTTP2_HEADER_METHOD,
@@ -10,7 +10,7 @@ const {
 
 export default class Router {
   public constructor(private routes: Route[]) { }
-  public handle = (headers: http2.IncomingHttpHeaders, requestBody: Record<string, any> | null): Response => {
+  public route = (headers: http2.IncomingHttpHeaders): RoutingResult => {
     const method = headers[HTTP2_HEADER_METHOD] as string
     const fullPath = headers[HTTP2_HEADER_PATH] as string
 
@@ -26,7 +26,11 @@ export default class Router {
         continue
       }
 
-      return route.action(matches.slice(1), new URLSearchParams(queryString), requestBody)
+      return {
+        pathParams: matches.slice(1),
+        queryParams: new URLSearchParams(queryString),
+        action: route.action,
+      }
     }
 
     const exception: Exception = {

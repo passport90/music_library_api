@@ -1,8 +1,9 @@
 import Exception from '../interfaces/exception'
+import RequestBody from '../interfaces/requestBody'
 import RequestBodyParserInterface from '../interfaces/requestBodyParserInterface'
 
 export default class RequestBodyParser implements RequestBodyParserInterface {
-  public parse = (chunks: string[]): Record<string, any> | null => {
+  public parse = (chunks: string[]): RequestBody => {
     if (chunks.length === 0) {
       return null
     }

@@ -1,4 +1,5 @@
 import http2 from 'http2'
+import { Client as PostgreSQLClient } from 'pg'
 import Exception from '../interfaces/exception'
 import ExceptionResponseFactoryInterface from '../interfaces/exceptionResponseFactoryInterface'
 import HeaderValidatorInterface from '../interfaces/headerValidatorInterface'
@@ -16,8 +17,9 @@ export default class StreamHandlerService implements StreamHandlerServiceInterfa
     private headerValidator: HeaderValidatorInterface,
     private exceptionResponseFactory: ExceptionResponseFactoryInterface,
     private responder: ResponderInterface,
-    private requestBodyParser: RequestBodyParserInterface,
     private router: RouterInterface,
+    private requestBodyParser: RequestBodyParserInterface,
+    private pgClient: PostgreSQLClient,
   ) { }
 
   public handle = (stream: ServerHttp2StreamInterface, headers: http2.IncomingHttpHeaders) => {
@@ -36,9 +38,10 @@ export default class StreamHandlerService implements StreamHandlerServiceInterfa
       try {
         this.headerValidator.validate(headers)
 
+        const { pathParams, queryParams, action } = this.router.route(headers)
         const requestBody = this.requestBodyParser.parse(chunks)
+        response = action(pathParams, queryParams, requestBody, this.pgClient)
 
-        response = this.router.handle(headers, requestBody)
         this.responder.respond(response, stream)
       } catch (error) {
         if (typeof error === 'object' && error !== null && 'code' in error && 'message' in error) {

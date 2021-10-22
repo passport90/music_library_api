@@ -1,6 +1,8 @@
 import http2 from 'http2'
+import RequestBody from './requestBody'
 import Response from './response'
+import RoutingResultInterface from './routingResult'
 
 export default interface RouterInterface {
-  handle: (headers: http2.IncomingHttpHeaders, requestBody: Record<string, any> | null) => Response
+  route: (headers: http2.IncomingHttpHeaders) => RoutingResult
 }
