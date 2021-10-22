@@ -1,7 +1,7 @@
 {
-  "name": "oslf-maury",
+  "name": "music_library_api",
   "version": "1.0.0",
-  "description": "Node REST API that lists Odin Sphere Leifthrasir's Maury dishes",
+  "description": "Node REST API that foro my personal music library",
   "main": "./dist/app.js",
   "type": "module",
   "scripts": {
@@ -14,7 +14,7 @@
     "tsc": "rm -rf ./dist && tsc"
   },
   "author": "Marhadiasha Kusumawardhana",
-  "license": "ISC",
+  "license": "Proprietary",
   "devDependencies": {
     "@types/jest": "^27.0.2",
     "@types/node": "^16.11.0",
