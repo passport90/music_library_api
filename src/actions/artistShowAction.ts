@@ -2,6 +2,7 @@ import pg from 'pg'
 import Action from '../interfaces/action'
 import RequestBody from '../interfaces/requestBody'
 import Response from '../interfaces/response'
+import Artist from '../models/artist.js'
 
 const artistShowAction: Action = async (
   pathParams: string[],
@@ -20,14 +21,9 @@ const artistShowAction: Action = async (
   }
 
   // Deserialize sort-safe name
-  const artist = res.rows[0]
-  const matches = artist.name.match(/^(.+), The$/)
-  let displayArtistName
-  if (matches !== null) {
-    displayArtistName = `The ${matches[1]}`
-  }
-  
-  return { status: 200, body: { ...artist, name: displayArtistName ?? artist.name } }
+  const artist = new Artist(parseInt(id), res.rows[0].name)
+
+  return { status: 200, body: artist.serialize() }
 }
 
 export default artistShowAction

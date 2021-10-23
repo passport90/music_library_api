@@ -2,6 +2,7 @@ import pg from 'pg'
 import Action from '../interfaces/action'
 import RequestBody from '../interfaces/requestBody'
 import Response from '../interfaces/response'
+import Artist from '../models/artist.js'
 
 const artistIndexAction: Action = async (
   _pathParams: string[],
@@ -10,18 +11,9 @@ const artistIndexAction: Action = async (
   pgClient: pg.Client
 ): Promise<Response> => {
   const res = await pgClient.query('select id, name from artist order by name')
-  const artists = res.rows
-
-  const displayArtists = artists.map((artist) => {
-    const matches = artist.name.match(/^(.+), The$/)
-    let displayArtistName
-    if (matches !== null) {
-      displayArtistName = `The ${matches[1]}`
-    }
-    return { ...artist, name: displayArtistName ?? artist.name }
-  })
+  const artists = res.rows.map((row) => new Artist(row.id, row.name))
   
-  return { status: 200, body: { artists: displayArtists } }
+  return { status: 200, body: { artists: artists.map((artist) => artist.serialize()) } }
 }
 
 export default artistIndexAction
