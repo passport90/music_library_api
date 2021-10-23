@@ -13,7 +13,7 @@ export default class Responder implements ResponderInterface {
   public respond = (response: Response, stream: ServerHttp2StreamInterface): void => {
     stream.respond({
       [HTTP2_HEADER_CONTENT_TYPE]: 'application/json',
-      [HTTP2_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN]: '*',
+      [HTTP2_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN]: 'http://localhost:3000',
       [HTTP2_HEADER_STATUS]: response.status,
     })
 

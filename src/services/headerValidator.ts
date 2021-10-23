@@ -8,12 +8,14 @@ const {
   HTTP2_METHOD_GET,
   HTTP2_METHOD_POST,
   HTTP2_METHOD_HEAD,
+  HTTP2_METHOD_OPTIONS,
 } = http2.constants
 
 const ALLOWED_HTTP_METHODS = [
   HTTP2_METHOD_GET,
   HTTP2_METHOD_POST,
   HTTP2_METHOD_HEAD,
+  HTTP2_METHOD_OPTIONS,
 ]
 export default class HeaderValidator implements HeaderValidatorInterface {
   public validate = (headers: http2.IncomingHttpHeaders): void => {
