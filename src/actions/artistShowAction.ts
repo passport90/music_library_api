@@ -19,9 +19,15 @@ const artistShowAction: Action = async (
     throw { code: 404, message: `There is no artist with ID ${id}.`}
   }
 
+  // Deserialize sort-safe name
   const artist = res.rows[0]
+  const matches = artist.name.match(/^(.+), The$/)
+  let displayArtistName
+  if (matches !== null) {
+    displayArtistName = `The ${matches[1]}`
+  }
   
-  return { status: 200, body: artist }
+  return { status: 200, body: { ...artist, name: displayArtistName ?? artist.name } }
 }
 
 export default artistShowAction

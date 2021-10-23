@@ -19,10 +19,17 @@ const artistCreateAction: Action = async (
     throw { code: 400, message: 'Invalid request body: name field value must be a string.'}
   }
 
+  // Store as sort-safe name
+  const matches = name.match(/^The (.+)$/)
+  let sortSafeName
+  if (matches !== null) {
+    sortSafeName = `${matches[1]}, The`
+  }
+
   // Execute
   const insertArtistRes = await pgClient.query({
     text: 'insert into artist (name) values ($1) returning id',
-    values: [name],
+    values: [sortSafeName ?? name],
   })
   const { id } = insertArtistRes.rows[0]
     
