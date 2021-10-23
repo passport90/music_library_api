@@ -1,6 +1,7 @@
 {
   "name": "music_library_api",
   "version": "1.0.0",
+  "private": true,
   "description": "Node REST API for my personal music library",
   "main": "./dist/app.js",
   "type": "module",
