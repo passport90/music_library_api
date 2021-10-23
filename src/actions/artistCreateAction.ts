@@ -1,5 +1,6 @@
 import pg from 'pg'
 import Action from '../interfaces/action'
+import Exception from '../interfaces/exception'
 import RequestBody from '../interfaces/requestBody'
 import Response from '../interfaces/response'
 
@@ -10,13 +11,19 @@ const artistCreateAction: Action = async (
   pgClient: pg.Client
 ): Promise<Response> => {
   if (body === null) {
-    throw { code: 400, message: 'Request body not sent.' }
+    const exception: Exception = { code: 400, message: 'Request body not sent.', isException: true }
+    throw exception
   }
 
   // Validate & resolve request body
   const { name } = body
   if (typeof name !== 'string') {
-    throw { code: 400, message: 'Invalid request body: name field value must be a string.'}
+    const exception: Exception = {
+      code: 400,
+      message: 'Invalid request body: name field value must be a string.',
+      isException: true,
+    }
+    throw exception
   }
 
   // Store as sort-safe name

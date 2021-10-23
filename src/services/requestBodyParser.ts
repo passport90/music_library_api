@@ -19,7 +19,8 @@ export default class RequestBodyParser implements RequestBodyParserInterface {
       if (error instanceof SyntaxError) {
         const exception: Exception = {
           code: 400,
-          message: `Error occurred when parsing request body: ${error.message}` 
+          message: `Error occurred when parsing request body: ${error.message}`,
+          isException: true,
         }
         throw exception
       }

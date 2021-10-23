@@ -35,7 +35,8 @@ export default class Router {
 
     const exception: Exception = {
       code: 404,
-      message: `Resource not found for route: ${method} ${fullPath}.`
+      message: `Resource not found for route: ${method} ${fullPath}.`,
+      isException: true,
     }
     throw exception
   } 

@@ -2,6 +2,7 @@ import artistCreateAction from '../actions/artistCreateAction.js'
 import artistIndexAction from '../actions/artistIndexAction.js'
 import artistShowAction from '../actions/artistShowAction.js'
 import trackCreateAction from '../actions/trackCreateAction.js'
+import trackIndexAction from '../actions/trackIndexAction.js'
 import trackShowAction from '../actions/trackShowAction.js'
 import Route from '../interfaces/route'
 
@@ -25,6 +26,11 @@ const routes: Route[] = [
     method: 'POST',
     path: /^\/tracks\/?$/,
     action: trackCreateAction,
+  },
+  {
+    method: 'GET',
+    path: /^\/tracks\/?$/,
+    action: trackIndexAction,
   },
   {
     method: 'GET',

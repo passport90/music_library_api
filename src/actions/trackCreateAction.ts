@@ -1,6 +1,7 @@
 import dateFNS from 'date-fns'
 import pg from 'pg'
 import Action from '../interfaces/action'
+import Exception from '../interfaces/exception'
 import RequestBody from '../interfaces/requestBody'
 import Response from '../interfaces/response'
 
@@ -13,7 +14,8 @@ const trackCreateAction: Action = async (
   pgClient: pg.Client
 ): Promise<Response> => {
   if (body === null) {
-    throw { code: 400, message: 'Request body not sent.' }
+    const exception: Exception = { code: 400, message: 'Request body not sent.', isException: true }
+    throw exception
   }
 
   // Validate & resolve request body
@@ -21,7 +23,12 @@ const trackCreateAction: Action = async (
   const stringFields: Record<string, unknown> = { title, releaseDate, spotifyId }
   for (const key in stringFields) {
     if (typeof stringFields[key] !== 'string') {
-      throw { code: 400, message: `Invalid request body: ${key} field value must be a string.`}
+      const exception: Exception = {
+        code: 400,
+        message: `Invalid request body: ${key} field value must be a string.`,
+        isException: true,
+      }
+      throw exception
     }
   }
 
@@ -32,18 +39,31 @@ const trackCreateAction: Action = async (
       throw error
     }
 
-    throw {
-      code: 400, message: 'Invalid request body: releaseDate field value must be a valid date in YYYY-MM-DD format.'
+    const exception: Exception = {
+      code: 400,
+      message: 'Invalid request body: releaseDate field value must be a valid date in YYYY-MM-DD format.',
+      isException: true,
     }
+    throw exception
   }
 
   if ((spotifyId as string).match(spotifyIdRegex) === null) {
-    throw { code: 400, message: 'Invalid request body: spotifyId field must consists of 22 alphanumeric characters.'}
+    const exception: Exception = {
+      code: 400,
+      message: 'Invalid request body: spotifyId field must consists of 22 alphanumeric characters.',
+      isException: true,
+    }
+    throw exception
   }
 
 
   if (!(Array.isArray(artists) && artists.length > 0)) {
-    throw { code: 400, message: 'Invalid request body: artists field value must be a non-empty array.' }
+    const exception: Exception = {
+      code: 400,
+      message: 'Invalid request body: artists field value must be a non-empty array.',
+      isException: true,
+    }
+    throw exception
   }
 
   let trackId
@@ -52,10 +72,21 @@ const trackCreateAction: Action = async (
     for (const artist of artists) {
       const { id, isMain } = artist
       if (!(Number.isInteger(id) && id > 0)) {
-        throw { code: 400, message: 'Invalid request body: artist ID must be a positive integer.' }
+        const exception: Exception = {
+          code: 400,
+          message: 'Invalid request body: artist ID must be a positive integer.',
+          isException: true,
+        }
+        throw exception
       }
+
       if (typeof isMain !== 'boolean') {
-        throw { code: 400, message: 'Invalid request body: isMain field value must be a boolean.' }
+        const exception: Exception = {
+          code: 400,
+          message: 'Invalid request body: isMain field value must be a boolean.',
+          isException: true,
+        }
+        throw exception
       }
 
       const artistExistRes = await pgClient.query({
@@ -64,7 +95,8 @@ const trackCreateAction: Action = async (
       })
 
       if (artistExistRes.rows[0].artists_exists === false) {
-        throw { code: 422, message: `There is no artist with ID ${id}.`}
+        const exception: Exception = { code: 422, message: `There is no artist with ID ${id}.`, isException: true }
+        throw exception
       }
     }
 

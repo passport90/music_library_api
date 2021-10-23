@@ -25,7 +25,8 @@ export default class HeaderValidator implements HeaderValidatorInterface {
     if (!(typeof method === 'string' && ALLOWED_HTTP_METHODS.includes(method))) {
       const exception: Exception = {
         code: 405,
-        message: `HTTP method ${method} is not allowed.`
+        message: `HTTP method ${method} is not allowed.`,
+        isException: true,
       }
       throw exception
     }
@@ -33,7 +34,8 @@ export default class HeaderValidator implements HeaderValidatorInterface {
     if (method === HTTP2_METHOD_POST && contentType !== 'application/json') {
       const exception: Exception = {
         code: 400,
-        message: 'Only application/json content type is accepted on POST requests.'
+        message: 'Only application/json content type is accepted on POST requests.',
+        isException: true,
       }
       throw exception
     }

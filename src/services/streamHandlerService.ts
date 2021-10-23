@@ -44,7 +44,7 @@ export default class StreamHandlerService implements StreamHandlerServiceInterfa
 
         this.responder.respond(response, stream)
       } catch (error) {
-        if (typeof error === 'object' && error !== null && 'code' in error && 'message' in error) {
+        if (typeof error === 'object' && error !== null && 'isException' in error) {
           response = this.exceptionResponseFactory.build(error as Exception)
         } else {
           let message: string
@@ -56,7 +56,7 @@ export default class StreamHandlerService implements StreamHandlerServiceInterfa
             message = 'Unknown error occurred.'
           }
 
-          response = this.exceptionResponseFactory.build({ code: 500, message })
+          response = this.exceptionResponseFactory.build({ code: 500, message, isException: true })
         } 
 
         this.responder.respond(response, stream)

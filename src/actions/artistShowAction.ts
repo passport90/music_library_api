@@ -1,5 +1,6 @@
 import pg from 'pg'
 import Action from '../interfaces/action'
+import Exception from '../interfaces/exception'
 import RequestBody from '../interfaces/requestBody'
 import Response from '../interfaces/response'
 import Artist from '../models/artist.js'
@@ -17,7 +18,8 @@ const artistShowAction: Action = async (
   })
 
   if (res.rows.length === 0) {
-    throw { code: 404, message: `There is no artist with ID ${id}.`}
+    const exception: Exception = { code: 404, message: `There is no artist with ID ${id}.`, isException: true }
+    throw exception
   }
 
   // Deserialize sort-safe name

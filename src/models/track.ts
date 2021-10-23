@@ -1,7 +1,7 @@
 import dateFNS from 'date-fns'
 import Model from '../interfaces/model'
 import StandardObject from '../interfaces/standardObject'
-import TrackArtist from './trackArtist'
+import Artist from './artist'
 
 export default class Track implements Model {
   public constructor(
@@ -9,7 +9,8 @@ export default class Track implements Model {
     private title: string,
     private releaseDate: Date,
     private spotifyId: string,
-    private artists: TrackArtist[],
+    private mainArtists: Artist[],
+    private guestArtists: Artist[],
   ) { }
 
   public serialize = (): StandardObject => {
@@ -18,7 +19,8 @@ export default class Track implements Model {
       title: this.title,
       releaseDate: dateFNS.format(this.releaseDate, 'yyyy-MM-dd'),
       spotifyId: this.spotifyId,
-      artists: this.artists.map((artist) => artist.serialize()),
+      mainArtists: this.mainArtists.map((artist) => artist.serialize()),
+      guestArtists: this.guestArtists.map((artist) => artist.serialize()),
     }
   }
 }
