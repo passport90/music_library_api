@@ -1,4 +1,4 @@
-import { Client as PostgreSQLClient } from 'pg'
+import pg from 'pg'
 import ArgumentParserInterface from '../interfaces/argumentParserInterface'
 import EnvironmentVariableCheckerInterface from '../interfaces/environmentVariableCheckerInterface'
 import ErrorHandlerServiceInterface from '../interfaces/errorHandlerServiceInterface'
@@ -17,7 +17,7 @@ export default class Application {
   public constructor(
     private environmentVariableChecker: EnvironmentVariableCheckerInterface,
     private argumentParser: ArgumentParserInterface,
-    private pgClient: PostgreSQLClient,
+    private pgClient: pg.Client,
     private streamHandlerService: StreamHandlerServiceInterface,
     private errorHandlerService: ErrorHandlerServiceInterface,
     private server: ServerInterface,

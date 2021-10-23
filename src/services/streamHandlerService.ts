@@ -28,7 +28,7 @@ export default class StreamHandlerService implements StreamHandlerServiceInterfa
       chunks.push(chunk.toString())
     })
 
-    stream.on('end', () => {
+    stream.on('end', async () => {
       if (headers[HTTP2_HEADER_METHOD] === HTTP2_METHOD_HEAD) {
         this.responder.respond({status: 200, body: null}, stream)
         return
@@ -40,7 +40,7 @@ export default class StreamHandlerService implements StreamHandlerServiceInterfa
 
         const { pathParams, queryParams, action } = this.router.route(headers)
         const requestBody = this.requestBodyParser.parse(chunks)
-        response = action(pathParams, queryParams, requestBody, this.pgClient)
+        response = await action(pathParams, queryParams, requestBody, this.pgClient)
 
         this.responder.respond(response, stream)
       } catch (error) {

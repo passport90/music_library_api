@@ -1,6 +1,5 @@
-import { URLSearchParams } from "url";
-import Action from "./action";
-import RequestBody from "./requestBody";
+import { URLSearchParams } from 'url'
+import Action from './action'
 
 export default interface RoutingResult {
   pathParams: string[],

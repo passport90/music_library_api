@@ -1,4 +1,4 @@
-import { Client as PostgreSQLClient} from 'pg'
+import pg from 'pg'
 import routes from './config/routes.js'
 import Application from './services/application.js'
 import ArgumentParser from './services/argumentParser.js'
@@ -23,7 +23,7 @@ const exceptionResponseFactory = new ExceptionResponseFactory()
 const responder = new Responder()
 const router = new Router(routes)
 const requestBodyParser = new RequestBodyParser()
-const pgClient = new PostgreSQLClient()
+const pgClient = new pg.Client({ connectionString: process.env.DATABASE_URL})
 const streamHandlerService = new StreamHandlerService(
   headerValidator,
   exceptionResponseFactory,
