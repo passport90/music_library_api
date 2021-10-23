@@ -1,7 +1,7 @@
 {
   "name": "music_library_api",
   "version": "1.0.0",
-  "description": "Node REST API that foro my personal music library",
+  "description": "Node REST API for my personal music library",
   "main": "./dist/app.js",
   "type": "module",
   "scripts": {
@@ -24,6 +24,7 @@
     "typescript": "^4.4.4"
   },
   "dependencies": {
+    "date-fns": "^2.25.0",
     "pg": "^8.7.1"
   }
 }
