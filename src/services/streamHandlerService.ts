@@ -47,16 +47,9 @@ export default class StreamHandlerService implements StreamHandlerServiceInterfa
         if (typeof error === 'object' && error !== null && 'isException' in error) {
           response = this.exceptionResponseFactory.build(error as Exception)
         } else {
-          let message: string
-          if (error instanceof Error) {
-            message = error.message
-          } else if (typeof error === 'string') {
-            message = error
-          } else {
-            message = 'Unknown error occurred.'
-          }
-
-          response = this.exceptionResponseFactory.build({ code: 500, message, isException: true })
+          console.log(error)
+          const exception: Exception = { code: 500, message: 'Internal server error.', isException: true }
+          response = this.exceptionResponseFactory.build(exception)
         } 
 
         this.responder.respond(response, stream)
