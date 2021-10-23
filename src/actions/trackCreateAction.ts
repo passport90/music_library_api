@@ -66,9 +66,10 @@ const trackCreateAction: Action = async (
     throw exception
   }
 
-  let trackId
+  let trackId: number
   await pgClient.query('begin transaction isolation level serializable')
   try {
+    let isMainArtistsDefined = false
     for (const artist of artists) {
       const { id, isMain } = artist
       if (!(Number.isInteger(id) && id > 0)) {
@@ -93,11 +94,19 @@ const trackCreateAction: Action = async (
         text: 'select exists(select 1 from artist where id = $1) as artist_exists',
         values: [id],
       })
-
       if (artistExistRes.rows[0].artists_exists === false) {
-        const exception: Exception = { code: 422, message: `There is no artist with ID ${id}.`, isException: true }
+        const exception: Exception = { code: 400, message: `There is no artist with ID ${id}.`, isException: true }
         throw exception
       }
+
+      if (isMain) {
+        isMainArtistsDefined = true
+      }
+    }
+
+    if (!isMainArtistsDefined) {
+      const exception: Exception = { code: 400, message: 'There must be at least 1 main artist.', isException: true }
+      throw exception
     }
 
     // Execute insert

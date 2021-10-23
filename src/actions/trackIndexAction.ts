@@ -15,20 +15,20 @@ const trackIndexAction: Action = async (
   const res = await pgClient.query({
     text: `
       select
-        id,  
+        track.id,  
         title,
         release_date,
         spotify_id,
-        array_agg(json_build_object("id", id, "name", name) order by name)
+        array_agg(json_build_object('id', artist.id, 'name', name) order by name)
           filter (where is_main = true) as main_artists,
-        array_agg(json_build_object("id", id, "name", name) order by name)
-          filter (where is_main = false) as guest_artists,
+        array_agg(json_build_object('id', artist.id, 'name', name) order by name)
+          filter (where is_main = false) as guest_artists
       from track
         join artist_track
           on track.id = track_id
         join artist
           on artist_id = artist.id 
-      group by title, release_date, spotify_id
+      group by track.id, title, release_date, spotify_id
       order by release_date
     `,
   })
@@ -42,14 +42,14 @@ const trackIndexAction: Action = async (
       main_artists: mainArtistObjects,
       guest_artists: guestArtistObjects,
     } = row
-    const mainArtists = mainArtistObjects.map((mainArtistObject: StandardObject) => {
-      const { id, name } = mainArtistObject
-      return new Artist(id, name)
+
+    const [mainArtists, guestArtists] = [mainArtistObjects, guestArtistObjects].map((artistObjects) => {
+      return artistObjects?.map((artistObject: StandardObject) => {
+        const { id, name } = artistObject
+        return new Artist(id, name)
+      }) ?? []
     })
-    const guestArtists = guestArtistObjects.map((guestArtistObject: StandardObject) => {
-      const { id, name } = guestArtistObject
-      return new Artist(id, name)
-    })
+
     return new Track(id, title, releaseDate, spotifyId, mainArtists, guestArtists)
   })
 
