@@ -47,7 +47,7 @@ const trackCreateAction: Action = async (
   }
 
   let trackId
-  await pgClient.query('begin')
+  await pgClient.query('begin transaction isolation level serializable')
   try {
     for (const artist of artists) {
       const { id, isMain } = artist
@@ -60,7 +60,7 @@ const trackCreateAction: Action = async (
 
       const artistExistRes = await pgClient.query({
         text: 'select exists(select 1 from artist where id = $1) as artist_exists',
-        values: [id]
+        values: [id],
       })
 
       if (artistExistRes.rows[0].artists_exists === false) {
@@ -79,7 +79,7 @@ const trackCreateAction: Action = async (
       const { id, isMain } = artist
       await pgClient.query({
         text: 'insert into artist_track (artist_id, track_id, is_main) values ($1, $2, $3)',
-        values: [id, trackId, isMain]
+        values: [id, trackId, isMain],
       })
     }
 

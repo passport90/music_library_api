@@ -22,7 +22,7 @@ const artistCreateAction: Action = async (
   // Execute
   const insertArtistRes = await pgClient.query({
     text: 'insert into artist (name) values ($1) returning id',
-    values: [name]
+    values: [name],
   })
   const { id } = insertArtistRes.rows[0]
     
