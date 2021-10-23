@@ -1,2 +1,4 @@
-type RequestBody = Record<string, any> | null  // eslint-disable-line @typescript-eslint/no-explicit-any
+import StandardObject from './standardObject'
+
+type RequestBody = StandardObject | null
 export default RequestBody

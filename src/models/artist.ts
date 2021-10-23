@@ -1,13 +1,11 @@
 import Model from '../interfaces/model'
+import StandardObject from '../interfaces/standardObject'
 
 export default class Artist implements Model {
-  constructor(private id: number, private name: string) { }
+  public constructor(private id: number, private name: string) { }
 
-  public serialize = () => {
-    return {
-      id: this.id,
-      name: this.getDisplayName()
-    }
+  public serialize = (): StandardObject => {
+    return { id: this.id, name: this.getDisplayName() }
   }
 
   private getDisplayName = (): string => {

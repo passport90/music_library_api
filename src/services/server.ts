@@ -5,7 +5,7 @@ import Http2ServiceInterface from '../interfaces/node/http2ServiceInterface'
 import ServerInterface from '../interfaces/serverInterface'
 
 export default class Server implements ServerInterface {
-  constructor(
+  public constructor(
     private filesystem: FilesystemInterface,
     private http2Service: Http2ServiceInterface,
   ) { }

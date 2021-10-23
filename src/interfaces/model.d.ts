@@ -1,3 +1,5 @@
+import StandardObject from './standardObject'
+
 export default interface Model {
-  serialize: () => Record<string, any> // eslint-disable-line @typescript-eslint/no-explicit-any
+  serialize: () => StandardObject
 }

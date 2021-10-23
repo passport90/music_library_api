@@ -4,6 +4,7 @@ import RequestBody from '../interfaces/requestBody'
 import Response from '../interfaces/response'
 import Artist from '../models/artist.js'
 import Track from '../models/track.js'
+import TrackArtist from '../models/trackArtist.js'
 
 const trackShowAction: Action = async (
   pathParams: string[],
@@ -45,11 +46,11 @@ const trackShowAction: Action = async (
   const trackArtists = trackArtistRes.rows.map((row) => {
     const { id, name, is_main: isMain } = row
     const artist = new Artist(id, name)
-    return { ...artist.serialize(), isMain }
+    return new TrackArtist(artist, isMain)
   })
-  const track = new Track(parseInt(id), title, releaseDate, spotifyId)
+  const track = new Track(parseInt(id), title, releaseDate, spotifyId, trackArtists)
 
-  return { status: 200, body: { ...track.serialize(), artists: trackArtists } }
+  return { status: 200, body: track.serialize() }
 }
 
 export default trackShowAction
