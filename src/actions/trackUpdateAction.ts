@@ -96,7 +96,7 @@ const trackUpdateAction: Action = async (
 
     // Execute update
     await pgClient.query({
-      text: 'update track set title = $1, release_date = $2, spotify_id = $3, is_loved = $4 where id = $4',
+      text: 'update track set title = $1, release_date = $2, spotify_id = $3, is_loved = $4 where id = $5',
       values: [title, releaseDate, spotifyId, isLoved, id]
     })
 
