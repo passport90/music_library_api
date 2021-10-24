@@ -18,7 +18,7 @@ const trackShowAction: Action = async (
   let trackRes, trackArtistRes
   try {
     trackRes = await pgClient.query({
-      text: 'select title, release_date, spotify_id from track where id = $1',
+      text: 'select title, release_date, spotify_id, is_loved from track where id = $1',
       values: [id],
     })
 
@@ -56,8 +56,8 @@ const trackShowAction: Action = async (
     }
   }
   
-  const { title, release_date: releaseDate, spotify_id: spotifyId } = trackRes.rows[0]
-  const track = new Track(parseInt(id), title, releaseDate, spotifyId, mainArtists, guestArtists)
+  const { title, release_date: releaseDate, spotify_id: spotifyId, is_loved: isLoved } = trackRes.rows[0]
+  const track = new Track(parseInt(id), title, releaseDate, spotifyId, isLoved, mainArtists, guestArtists)
 
   return { status: 200, body: track.serialize() }
 }

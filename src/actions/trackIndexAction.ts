@@ -19,6 +19,7 @@ const trackIndexAction: Action = async (
         title,
         release_date,
         spotify_id,
+        is_loved,
         array_agg(json_build_object('id', artist.id, 'name', name) order by name)
           filter (where is_main = true) as main_artists,
         array_agg(json_build_object('id', artist.id, 'name', name) order by name)
@@ -39,6 +40,7 @@ const trackIndexAction: Action = async (
       title,
       release_date: releaseDate,
       spotify_id: spotifyId,
+      is_loved: isLoved,
       main_artists: mainArtistObjects,
       guest_artists: guestArtistObjects,
     } = row
@@ -50,7 +52,7 @@ const trackIndexAction: Action = async (
       }) ?? []
     })
 
-    return new Track(id, title, releaseDate, spotifyId, mainArtists, guestArtists)
+    return new Track(id, title, releaseDate, spotifyId, isLoved, mainArtists, guestArtists)
   })
 
 

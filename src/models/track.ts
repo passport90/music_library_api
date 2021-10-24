@@ -9,6 +9,7 @@ export default class Track implements Model {
     private title: string,
     private releaseDate: Date,
     private spotifyId: string,
+    private isLoved: boolean,
     private mainArtists: Artist[],
     private guestArtists: Artist[],
   ) { }
@@ -19,6 +20,7 @@ export default class Track implements Model {
       title: this.title,
       releaseDate: dateFNS.format(this.releaseDate, 'yyyy-MM-dd'),
       spotifyId: this.spotifyId,
+      isLoved: this.isLoved,
       mainArtists: this.mainArtists.map((artist) => artist.serialize()),
       guestArtists: this.guestArtists.map((artist) => artist.serialize()),
     }

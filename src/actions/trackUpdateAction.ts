@@ -33,7 +33,7 @@ const trackUpdateAction: Action = async (
     }
 
     // Validate & resolve request body
-    const { title, releaseDate, spotifyId } = body
+    const { title, releaseDate, spotifyId, isLoved } = body
     const stringFields: Record<string, unknown> = { title, releaseDate, spotifyId }
     for (const key in stringFields) {
       if (typeof stringFields[key] !== 'string') {
@@ -70,6 +70,15 @@ const trackUpdateAction: Action = async (
       throw exception
     }
 
+    if (typeof isLoved !== 'boolean') {
+      const exception: Exception = {
+        code: 400,
+        message: 'Invalid request body: isLoved field value must be a boolean.',
+        isException: true,
+      }
+      throw exception
+    }
+
     const spotifyIdTrackExistRes = await pgClient.query({
       text: 'select exists(select 1 from track where spotify_id = $1 and id <> $2) as track_exists',
       values: [spotifyId, id]
@@ -83,10 +92,12 @@ const trackUpdateAction: Action = async (
       throw exception
     }
 
+
+
     // Execute update
     await pgClient.query({
-      text: 'update track set title = $1, release_date = $2, spotify_id = $3 where id = $4',
-      values: [title, releaseDate, spotifyId, id]
+      text: 'update track set title = $1, release_date = $2, spotify_id = $3, is_loved = $4 where id = $4',
+      values: [title, releaseDate, spotifyId, isLoved, id]
     })
 
     // Commit

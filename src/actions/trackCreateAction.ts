@@ -19,7 +19,7 @@ const trackCreateAction: Action = async (
   }
 
   // Validate & resolve request body
-  const { title, releaseDate, spotifyId, mainArtistIds, guestArtistIds } = body
+  const { title, releaseDate, spotifyId, isLoved, mainArtistIds, guestArtistIds } = body
 
   const stringFields: Record<string, unknown> = { title, releaseDate, spotifyId }
   for (const key in stringFields) {
@@ -57,6 +57,14 @@ const trackCreateAction: Action = async (
     throw exception
   }
 
+  if (typeof isLoved !== 'boolean') {
+    const exception: Exception = {
+      code: 400,
+      message: 'Invalid request body: isLoved field value must be a boolean.',
+      isException: true,
+    }
+    throw exception
+  }
 
   if (!(Array.isArray(mainArtistIds) && mainArtistIds.length > 0)) {
     const exception: Exception = {
@@ -128,8 +136,8 @@ const trackCreateAction: Action = async (
 
     // Execute insert
     const insertTrackRes = await pgClient.query({
-      text: 'insert into track (title, release_date, spotify_id) values ($1, $2, $3) returning id',
-      values: [title, releaseDate, spotifyId]
+      text: 'insert into track (title, release_date, spotify_id, is_loved) values ($1, $2, $3, $4) returning id',
+      values: [title, releaseDate, spotifyId, isLoved]
     })
     trackId = insertTrackRes.rows[0].id
 
