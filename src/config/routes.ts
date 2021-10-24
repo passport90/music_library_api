@@ -4,6 +4,7 @@ import artistShowAction from '../actions/artistShowAction.js'
 import trackCreateAction from '../actions/trackCreateAction.js'
 import trackIndexAction from '../actions/trackIndexAction.js'
 import trackShowAction from '../actions/trackShowAction.js'
+import trackUpdateAction from '../actions/trackUpdateAction.js'
 import Route from '../interfaces/route'
 
 const routes: Route[] = [
@@ -36,6 +37,11 @@ const routes: Route[] = [
     method: 'GET',
     path: /^\/tracks\/([1-9]\d*)\/?$/,
     action: trackShowAction,
+  },
+  {
+    method: 'PUT',
+    path: /^\/tracks\/([1-9]\d*)\/?$/,
+    action: trackUpdateAction,
   },
 ]
 

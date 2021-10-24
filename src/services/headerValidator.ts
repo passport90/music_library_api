@@ -9,6 +9,7 @@ const {
   HTTP2_METHOD_POST,
   HTTP2_METHOD_HEAD,
   HTTP2_METHOD_OPTIONS,
+  HTTP2_METHOD_PUT,
 } = http2.constants
 
 const ALLOWED_HTTP_METHODS = [
@@ -16,6 +17,7 @@ const ALLOWED_HTTP_METHODS = [
   HTTP2_METHOD_POST,
   HTTP2_METHOD_HEAD,
   HTTP2_METHOD_OPTIONS,
+  HTTP2_METHOD_PUT,
 ]
 export default class HeaderValidator implements HeaderValidatorInterface {
   public validate = (headers: http2.IncomingHttpHeaders): void => {
@@ -33,10 +35,10 @@ export default class HeaderValidator implements HeaderValidatorInterface {
       throw exception
     }
 
-    if (method === HTTP2_METHOD_POST && contentType !== 'application/json') {
+    if ((method === HTTP2_METHOD_POST || method === HTTP2_METHOD_PUT) && contentType !== 'application/json') {
       const exception: Exception = {
         code: 400,
-        message: 'Only application/json content type is accepted on POST requests.',
+        message: 'Only application/json content type is accepted on POST and PUT requests.',
         isException: true,
       }
       throw exception

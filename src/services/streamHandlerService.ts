@@ -41,7 +41,6 @@ export default class StreamHandlerService implements StreamHandlerServiceInterfa
         return
       }
 
-
       // Usual route
       let response: Response
       try {
@@ -62,7 +61,7 @@ export default class StreamHandlerService implements StreamHandlerServiceInterfa
         if (typeof error === 'object' && error !== null && 'isException' in error) {
           response = this.exceptionResponseFactory.build(error as Exception)
         } else {
-          console.log(error)
+          console.error(error)
           const exception: Exception = { code: 500, message: 'Internal server error.', isException: true }
           response = this.exceptionResponseFactory.build(exception)
         } 
@@ -76,7 +75,7 @@ export default class StreamHandlerService implements StreamHandlerServiceInterfa
     stream.respond({
       [HTTP2_HEADER_STATUS]: 204,
       [HTTP2_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN]: 'http://localhost:3000',
-      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, HEAD',
+      'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS, POST, PUT',
       'Access-Control-Allow-Headers': 'Content-Type',
       'Access-Control-Max-Age': 86400
     })
