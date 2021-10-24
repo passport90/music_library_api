@@ -19,7 +19,8 @@ const trackCreateAction: Action = async (
   }
 
   // Validate & resolve request body
-  const { title, releaseDate, spotifyId, artists } = body
+  const { title, releaseDate, spotifyId, mainArtistIds, guestArtistIds } = body
+
   const stringFields: Record<string, unknown> = { title, releaseDate, spotifyId }
   for (const key in stringFields) {
     if (typeof stringFields[key] !== 'string') {
@@ -57,39 +58,51 @@ const trackCreateAction: Action = async (
   }
 
 
-  if (!(Array.isArray(artists) && artists.length > 0)) {
+  if (!(Array.isArray(mainArtistIds) && mainArtistIds.length > 0)) {
     const exception: Exception = {
       code: 400,
-      message: 'Invalid request body: artists field value must be a non-empty array.',
+      message: 'Invalid request body: mainArtistIds field value must be a non-empty array.',
       isException: true,
     }
     throw exception
   }
 
+  if (!Array.isArray(guestArtistIds)) {
+    const exception: Exception = {
+      code: 400,
+      message: 'Invalid request body: guestArtistIds field value must be an array.',
+      isException: true,
+    }
+    throw exception
+  }
+
+  const artistIds = mainArtistIds.concat(guestArtistIds) 
+  artistIds.forEach(id => {
+    if (!(Number.isInteger(id) && id > 0)) {
+      const exception: Exception = {
+        code: 400,
+        message: 'Invalid request body: artist ID must be a positive integer.',
+        isException: true,
+      }
+      throw exception
+    }
+  })
+
+  mainArtistIds.forEach(mainArtistId => {
+    if (guestArtistIds.includes(mainArtistId)) {
+      const exception: Exception = {
+        code: 400,
+        message: 'Invalid request body: A main artist cannot also be a guest artist.',
+        isException: true,
+      }
+      throw exception
+    }
+  })
+
   let trackId: number
   await pgClient.query('begin transaction isolation level serializable')
   try {
-    let isMainArtistsDefined = false
-    for (const artist of artists) {
-      const { id, isMain } = artist
-      if (!(Number.isInteger(id) && id > 0)) {
-        const exception: Exception = {
-          code: 400,
-          message: 'Invalid request body: artist ID must be a positive integer.',
-          isException: true,
-        }
-        throw exception
-      }
-
-      if (typeof isMain !== 'boolean') {
-        const exception: Exception = {
-          code: 400,
-          message: 'Invalid request body: isMain field value must be a boolean.',
-          isException: true,
-        }
-        throw exception
-      }
-
+    for (const id of artistIds) {
       const artistExistRes = await pgClient.query({
         text: 'select exists(select 1 from artist where id = $1) as artist_exists',
         values: [id],
@@ -98,15 +111,6 @@ const trackCreateAction: Action = async (
         const exception: Exception = { code: 400, message: `There is no artist with ID ${id}.`, isException: true }
         throw exception
       }
-
-      if (isMain) {
-        isMainArtistsDefined = true
-      }
-    }
-
-    if (!isMainArtistsDefined) {
-      const exception: Exception = { code: 400, message: 'There must be at least 1 main artist.', isException: true }
-      throw exception
     }
 
     // Execute insert
@@ -116,11 +120,16 @@ const trackCreateAction: Action = async (
     })
     trackId = insertTrackRes.rows[0].id
 
-    for (const artist of artists) {
-      const { id, isMain } = artist
+    for (const id of mainArtistIds) {
       await pgClient.query({
         text: 'insert into artist_track (artist_id, track_id, is_main) values ($1, $2, $3)',
-        values: [id, trackId, isMain],
+        values: [id, trackId, true],
+      })
+    }
+    for (const id of guestArtistIds) {
+      await pgClient.query({
+        text: 'insert into artist_track (artist_id, track_id, is_main) values ($1, $2, $3)',
+        values: [id, trackId, false],
       })
     }
 
