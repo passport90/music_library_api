@@ -102,6 +102,19 @@ const trackCreateAction: Action = async (
   let trackId: number
   await pgClient.query('begin transaction isolation level serializable')
   try {
+    const trackExistRes = await pgClient.query({
+      text: 'select exists(select 1 from track where spotify_id = $1) as track_exists',
+      values: [spotifyId]
+    })
+    if (trackExistRes.rows[0].track_exists === true) {
+      const exception: Exception = {
+        code: 400,
+        message: `Track with spotify ID ${spotifyId} already exists.`,
+        isException: true
+      }
+      throw exception
+    }
+
     for (const id of artistIds) {
       const artistExistRes = await pgClient.query({
         text: 'select exists(select 1 from artist where id = $1) as artist_exists',

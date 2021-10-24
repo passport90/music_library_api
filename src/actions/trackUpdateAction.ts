@@ -70,6 +70,19 @@ const trackUpdateAction: Action = async (
       throw exception
     }
 
+    const spotifyIdTrackExistRes = await pgClient.query({
+      text: 'select exists(select 1 from track where spotify_id = $1 and id <> $2) as track_exists',
+      values: [spotifyId, id]
+    })
+    if (spotifyIdTrackExistRes.rows[0].track_exists === true) {
+      const exception: Exception = {
+        code: 400,
+        message: `Track with spotify ID ${spotifyId} already exists.`,
+        isException: true
+      }
+      throw exception
+    }
+
     // Execute update
     await pgClient.query({
       text: 'update track set title = $1, release_date = $2, spotify_id = $3 where id = $4',
