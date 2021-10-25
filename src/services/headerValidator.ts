@@ -37,7 +37,7 @@ export default class HeaderValidator implements HeaderValidatorInterface {
       throw exception
     }
 
-    if (authorization !== `Bearer ${process.env.AUTH_TOKEN}`) {
+    if (method !== HTTP2_METHOD_OPTIONS && authorization !== `Bearer ${process.env.AUTH_TOKEN}`) {
       const exception: Exception = {
         code: 401,
         message: 'Authorization token is either incorrect or invalid.',

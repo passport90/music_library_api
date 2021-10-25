@@ -76,7 +76,7 @@ export default class StreamHandlerService implements StreamHandlerServiceInterfa
       [HTTP2_HEADER_STATUS]: 204,
       [HTTP2_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN]: 'http://localhost:3000',
       'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS, POST, PUT',
-      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Headers': 'Authorization, Content-Type',
       'Access-Control-Max-Age': 86400
     })
   } 
