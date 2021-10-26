@@ -74,7 +74,7 @@ export default class StreamHandlerService implements StreamHandlerServiceInterfa
   private respondToOptions = (stream: ServerHttp2StreamInterface): void => {
     stream.respond({
       [HTTP2_HEADER_STATUS]: 204,
-      [HTTP2_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN]: 'http://localhost:3000',
+      [HTTP2_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN]: process.env.WEB_UI_HOST,
       'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS, POST, PUT',
       'Access-Control-Allow-Headers': 'Authorization, Content-Type',
       'Access-Control-Max-Age': 86400
