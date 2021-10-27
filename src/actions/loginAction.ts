@@ -36,7 +36,7 @@ const loginAction: Action = async (
     throw exception
   }
 
-  const token = jwt.sign({ loggedIn: true }, process.env.JWT_SECRET as string, { expiresIn: '1d' })
+  const token = jwt.sign({ loggedIn: true }, process.env.JWT_SECRET as string, { expiresIn: '1h' })
 
   return { status: 200, body: { token } }
 }
