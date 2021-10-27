@@ -1,5 +1,6 @@
 import http2 from 'http2'
 import { Client as PostgreSQLClient } from 'pg'
+import AuthenticatorInterface from '../interfaces/authenticatorInterface'
 import Exception from '../interfaces/exception'
 import ExceptionResponseFactoryInterface from '../interfaces/exceptionResponseFactoryInterface'
 import HeaderValidatorInterface from '../interfaces/headerValidatorInterface'
@@ -12,6 +13,7 @@ import StreamHandlerServiceInterface from '../interfaces/streamHandlerServiceInt
 
 const {
   HTTP2_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
+  HTTP2_HEADER_AUTHORIZATION,
   HTTP2_HEADER_METHOD,
   HTTP2_HEADER_STATUS,
   HTTP2_METHOD_HEAD,
@@ -21,6 +23,7 @@ const {
 export default class StreamHandlerService implements StreamHandlerServiceInterface {
   public constructor(
     private headerValidator: HeaderValidatorInterface,
+    private authenticator: AuthenticatorInterface,
     private exceptionResponseFactory: ExceptionResponseFactoryInterface,
     private responder: ResponderInterface,
     private router: RouterInterface,
@@ -52,7 +55,15 @@ export default class StreamHandlerService implements StreamHandlerServiceInterfa
           return
         }
 
-        const { pathParams, queryParams, action } = this.router.route(headers)
+        const { pathParams, queryParams, action, authenticationRequired } = this.router.route(headers)
+        if (authenticationRequired) {
+          const authorizationHeader = headers[HTTP2_HEADER_AUTHORIZATION]
+          if (!(typeof authorizationHeader === 'string' && this.authenticator.isAuthentic(authorizationHeader))) {
+            const exception: Exception = { code: 401, message: 'Invalid or expired token', isException: true }
+            throw exception
+          }
+        }
+
         const requestBody = this.requestBodyParser.parse(chunks)
         response = await action(pathParams, queryParams, requestBody, this.pgClient)
 

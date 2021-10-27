@@ -4,4 +4,5 @@ export default interface Route {
   method: 'DELETE' | 'GET' | 'POST' | 'PUT'
   path: RegExp
   action: Action
+  authenticationRequired?: boolean
 }

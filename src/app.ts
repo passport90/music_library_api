@@ -2,6 +2,7 @@ import pg from 'pg'
 import routes from './config/routes.js'
 import Application from './services/application.js'
 import ArgumentParser from './services/argumentParser.js'
+import Authenticator from './services/authenticator.js'
 import EnvironmentVariableChecker from './services/environmentVariableChecker.js'
 import ErrorHandlerService from './services/errorHandlerService.js'
 import ExceptionResponseFactory from './services/exceptionResponseFactory.js'
@@ -19,6 +20,7 @@ const environmentVariableChecker = new EnvironmentVariableChecker()
 const argumentParser = new ArgumentParser()
 
 const headerValidator = new HeaderValidator()
+const authenticator = new Authenticator()
 const exceptionResponseFactory = new ExceptionResponseFactory()
 const responder = new Responder()
 const router = new Router(routes)
@@ -26,6 +28,7 @@ const requestBodyParser = new RequestBodyParser()
 const pgClient = new pg.Client({ connectionString: process.env.DATABASE_URL})
 const streamHandlerService = new StreamHandlerService(
   headerValidator,
+  authenticator,
   exceptionResponseFactory,
   responder,
   router,

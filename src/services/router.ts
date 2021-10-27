@@ -30,6 +30,7 @@ export default class Router {
         pathParams: matches.slice(1),
         queryParams: new URLSearchParams(queryString),
         action: route.action,
+        authenticationRequired: route.authenticationRequired ?? true
       }
     }
 
