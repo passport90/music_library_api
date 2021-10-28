@@ -6,11 +6,14 @@ import ServerInterface from '../interfaces/serverInterface'
 import StreamHandlerServiceInterface from '../interfaces/streamHandlerServiceInterface'
 
 export const REQUIRED_ENVIRONMENT_VARIABLES = [
+  'AUTH_USERNAME',
+  'AUTH_PASSWORD',
   'DATABASE_URL',
+  'JWT_SECRET',
   'SSL_PRIVATE_KEY_FILEPATH',
   'SSL_CERTIFICATE_FILEPATH',
-  'WEB_UI_HOST',
   'TZ',
+  'WEB_UI_HOST',
 ]
 
 export const DEFAULT_PORT = 8443

@@ -2,6 +2,7 @@ import artistCreateAction from '../actions/artistCreateAction.js'
 import artistIndexAction from '../actions/artistIndexAction.js'
 import artistShowAction from '../actions/artistShowAction.js'
 import artistUpdateAction from '../actions/artistUpdateAction.js'
+import loginAction from '../actions/loginAction.js'
 import trackCreateAction from '../actions/trackCreateAction.js'
 import trackIndexAction from '../actions/trackIndexAction.js'
 import trackShowAction from '../actions/trackShowAction.js'
@@ -9,6 +10,12 @@ import trackUpdateAction from '../actions/trackUpdateAction.js'
 import Route from '../interfaces/route'
 
 const routes: Route[] = [
+  {
+    method: 'POST',
+    path: /^\/login\/?$/,
+    action: loginAction,
+    authenticationRequired: false
+  },
   {
     method: 'POST',
     path: /^\/artists\/?$/,

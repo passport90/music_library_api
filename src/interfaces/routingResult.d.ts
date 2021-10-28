@@ -5,4 +5,5 @@ export default interface RoutingResult {
   pathParams: string[],
   queryParams: URLSearchParams,
   action: Action,
+  authenticationRequired: boolean
 }
