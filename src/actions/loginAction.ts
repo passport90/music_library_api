@@ -32,7 +32,7 @@ const loginAction: Action = async (
   }
   
   if (!(username === process.env.AUTH_USERNAME && password === process.env.AUTH_PASSWORD)) {
-    const exception: Exception = { code: 401, message: 'Incorrect username or password', isException: true }
+    const exception: Exception = { code: 401, message: 'Incorrect username or password.', isException: true }
     throw exception
   }
 
