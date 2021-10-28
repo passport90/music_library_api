@@ -4,7 +4,6 @@
   "private": true,
   "description": "Node REST API for my personal music library",
   "main": "./dist/app.js",
-  "type": "module",
   "bin": {
     "music_library_api": "./dist/app.js"
   },

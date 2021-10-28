@@ -1,4 +1,4 @@
-import dateFNS from 'date-fns'
+import format from 'date-fns/format'
 import Model from '../interfaces/model'
 import StandardObject from '../interfaces/standardObject'
 import Artist from './artist'
@@ -18,7 +18,7 @@ export default class Track implements Model {
     return {
       id: this.id,
       title: this.title,
-      releaseDate: dateFNS.format(this.releaseDate, 'yyyy-MM-dd'),
+      releaseDate: format(this.releaseDate, 'yyyy-MM-dd'),
       spotifyId: this.spotifyId,
       isLoved: this.isLoved,
       mainArtists: this.mainArtists.map((artist) => artist.serialize()),
