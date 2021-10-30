@@ -1,7 +1,6 @@
 import pg from 'pg'
 import ArgumentParserInterface from '../interfaces/argumentParserInterface'
 import EnvironmentVariableCheckerInterface from '../interfaces/environmentVariableCheckerInterface'
-import ErrorHandlerServiceInterface from '../interfaces/errorHandlerServiceInterface'
 import ServerInterface from '../interfaces/serverInterface'
 import StreamHandlerServiceInterface from '../interfaces/streamHandlerServiceInterface'
 
@@ -24,7 +23,6 @@ export default class Application {
     private argumentParser: ArgumentParserInterface,
     private pgClient: pg.Client,
     private streamHandlerService: StreamHandlerServiceInterface,
-    private errorHandlerService: ErrorHandlerServiceInterface,
     private server: ServerInterface,
   ) { }
 
@@ -36,7 +34,6 @@ export default class Application {
     this.server.serve(
       port,
       this.streamHandlerService.handle,
-      this.errorHandlerService.handle,
       process.env.SSL_PRIVATE_KEY_FILEPATH as string,
       process.env.SSL_CERTIFICATE_FILEPATH as string,
     )

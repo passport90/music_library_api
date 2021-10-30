@@ -1,5 +1,4 @@
 import StreamHandler from '../interfaces/streamHandler'
-import ErrorHandler from '../interfaces/errorHandler'
 import FilesystemInterface from '../interfaces/node/filesystemInterface'
 import Http2ServiceInterface from '../interfaces/node/http2ServiceInterface'
 import ServerInterface from '../interfaces/serverInterface'
@@ -13,7 +12,6 @@ export default class Server implements ServerInterface {
   public serve = (
     port: number,
     streamHandler: StreamHandler,
-    errorHandler: ErrorHandler,
     sslPrivateKeyFilePath: string,
     sslCertificateFilePath: string,
   ) => {
@@ -21,7 +19,18 @@ export default class Server implements ServerInterface {
     const sslCertificate = this.filesystem.readFileSync(sslCertificateFilePath)
     const http2Server = this.http2Service.createSecureServer({ key: sslPrivateKey, cert: sslCertificate })
 
-    http2Server.on('error', errorHandler)
+    http2Server.on('error', (error: unknown) => {
+      if (
+        typeof error === 'object'
+        && error !== null
+        && 'code' in error
+        && (error as { code: string }).code === 'ECONNRESET'
+      ) {
+        http2Server.listen(port)
+        return
+      }
+      console.error(error)
+    })
     http2Server.on('stream', streamHandler)
 
     http2Server.listen(port)

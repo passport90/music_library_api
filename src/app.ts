@@ -4,7 +4,6 @@ import Application from './services/application.js'
 import ArgumentParser from './services/argumentParser.js'
 import Authenticator from './services/authenticator.js'
 import EnvironmentVariableChecker from './services/environmentVariableChecker.js'
-import ErrorHandlerService from './services/errorHandlerService.js'
 import ExceptionResponseFactory from './services/exceptionResponseFactory.js'
 import HeaderValidator from './services/headerValidator.js'
 import Filesystem from './services/node/filesystem.js'
@@ -36,8 +35,6 @@ const streamHandlerService = new StreamHandlerService(
   pgClient,
 )
 
-const errorHandlerService = new ErrorHandlerService()
-
 const filesystem = new Filesystem()
 const http2Service = new Http2Service()
 const server = new Server(filesystem, http2Service)
@@ -47,7 +44,6 @@ const application = new Application(
   argumentParser,
   pgClient,
   streamHandlerService,
-  errorHandlerService,
   server,
 )
 
