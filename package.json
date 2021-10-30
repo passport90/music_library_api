@@ -5,6 +5,7 @@
   "description": "Node REST API for my personal music library",
   "main": "./dist/app.js",
   "type": "module",
+  "bin": "dist/app.js",
   "scripts": {
     "compile": "npm run lint && npm run tsc",
     "lint": "eslint --fix ./src/**",
