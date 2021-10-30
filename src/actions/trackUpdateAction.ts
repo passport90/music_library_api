@@ -1,4 +1,4 @@
-import dateFNS from 'date-fns'
+import parseISO from 'date-fns/parseISO'
 import pg from 'pg'
 import Action from '../interfaces/action'
 import Exception from '../interfaces/exception'
@@ -46,13 +46,7 @@ const trackUpdateAction: Action = async (
       }
     }
 
-    try {
-      dateFNS.parseISO(`${releaseDate as string}T00:00:00Z`)    
-    } catch (error) {
-      if (error !== 'Invalid Date') {
-        throw error
-      }
-
+    if (parseISO(`${releaseDate as string}T00:00:00Z`).toString() === 'Invalid Date') {
       const exception: Exception = {
         code: 400,
         message: 'Invalid request body: releaseDate field value must be a valid date in YYYY-MM-DD format.',

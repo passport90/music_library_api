@@ -1,4 +1,4 @@
-import dateFNS from 'date-fns'
+import parseISO from 'date-fns/parseISO'
 import pg from 'pg'
 import Action from '../interfaces/action'
 import Exception from '../interfaces/exception'
@@ -75,7 +75,7 @@ const validateReleaseDateArgs = (releaseDateArgs: (string | null)[]): void => {
       return
     }
 
-    if (dateFNS.parseISO(`${dateArg}T00:00:00Z`).toString() === 'Invalid Date') {
+    if (parseISO(`${dateArg}T00:00:00Z`).toString() === 'Invalid Date') {
       const message = 'Invalid request body: release_date_start or release_date_end parameter argument must be a valid '
                       + 'date in YYYY-MM-DD format.'
       const exception: Exception = { code: 400, message, isException: true }
