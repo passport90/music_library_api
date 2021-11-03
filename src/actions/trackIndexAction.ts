@@ -40,6 +40,7 @@ const trackIndexAction: Action = async (
       ${whereClause}
       group by track.id, title, release_date, spotify_id
       order by release_date, title, id
+      limit 100
     `,
     values
   })
