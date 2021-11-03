@@ -10,7 +10,7 @@ const artistIndexAction: Action = async (
   _body: RequestBody,
   pgClient: pg.Client
 ): Promise<Response> => {
-  const res = await pgClient.query('select id, name from artist order by name limit 100')
+  const res = await pgClient.query('select id, name from artist order by name')
   const artists = res.rows.map((row) => new Artist(row.id, row.name))
   
   return { status: 200, body: { artists: artists.map((artist) => artist.serialize()) } }
